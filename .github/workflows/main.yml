@@ -31,9 +31,9 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             set -e
-            cd /home/ubuntu/drf_ci-cd
-            git pull origin main	
-            cd /home/ubuntu/drf_ci-cd/drf_test
+            cd /home/ubuntu/app/weniversity-server
+            git pull origin main
+            cd /home/ubuntu/app/weniversity-server
             echo "SECRET_KEY='${{ secrets.SECRET_KEY }}'" > .env
             echo "DEBUG='${{ secrets.DEBUG }}'" >> .env
 
