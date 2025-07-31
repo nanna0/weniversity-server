@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 체크아웃 레포지토리
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 파이썬 설정
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -22,23 +22,32 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          
-      - name: 서버 배포
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }} 
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script: |
-            set -e
-            cd /home/ubuntu/app/weniversity-server
-            git pull origin main
-            echo "SECRET_KEY='${{ secrets.SECRET_KEY }}'" > .env
-            echo "DEBUG='${{ secrets.DEBUG }}'" >> .env
 
+      - name: PEM 키 파일 설정
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PEM_FILE_CONTENT }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/key.pem
+          chmod 600 ~/.ssh/key.pem
+
+      - name: 서버 배포
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
+            set -e
+            cd /home/ubuntu/app/weniversity-server/
+            git pull origin main
+
+            cd /home/ubuntu/app/weniversity-server/
+            echo "SECRET_KEY=\"${{ secrets.SECRET_KEY }}\"" > .env
+            echo "DEBUG='${{ secrets.DEBUG }}'" >> .env
             source venv/bin/activate
             pip install -r requirements.txt
 
             python3 manage.py collectstatic --noinput
 
             sudo systemctl restart site.service
+          EOF
