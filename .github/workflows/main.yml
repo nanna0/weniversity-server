@@ -38,7 +38,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
             set -e
-            cd /home/ubuntu/drf_ci-cd
+            cd /home/ubuntu/weniversity-server/
             git pull origin main
 
             cd /home/ubuntu/weniversity-server/
