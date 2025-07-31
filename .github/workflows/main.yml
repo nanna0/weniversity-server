@@ -40,8 +40,6 @@ jobs:
             set -e
             cd /home/ubuntu/app/weniversity-server/
             git pull origin main
-
-            cd /home/ubuntu/app/weniversity-server/
             echo "SECRET_KEY=\"${{ secrets.SECRET_KEY }}\"" > .env
             echo "DEBUG='${{ secrets.DEBUG }}'" >> .env
             source venv/bin/activate
