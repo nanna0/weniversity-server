@@ -38,7 +38,7 @@ class User(AbstractUser):
         ADMIN = "admin", "Admin"
 
     username = None  # username 필드를 사용하지 않음
-    user_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     email = models.EmailField(unique=True, null=False, blank=False)
     password = models.CharField(max_length=128, null=False, blank=False)
     name = models.CharField(max_length=100, blank=True)

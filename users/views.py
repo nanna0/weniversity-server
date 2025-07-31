@@ -5,7 +5,9 @@ from .serializers import UserSerializer
 from .models import User
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import authenticate
 from .serializers import CustomTokenObtainPairSerializer
+from rest_framework.views import APIView
 
 
 class UserRegisterView(APIView):
@@ -24,6 +26,20 @@ class UserRegisterView(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class UserLoginView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        
+        user = authenticate(request, email=email, password=password)
+        
+        if user is not None:
+            # 로그인 성공 시 토큰 생성 등 처리
+            return Response({"message": "로그인 성공"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "잘못된 이메일 또는 비밀번호"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 from django.shortcuts import render
