@@ -168,7 +168,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    "http://13.125.180.222",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
+    "http://13.125.180.222/",
+    "http://localhost:5173/",
 ]
