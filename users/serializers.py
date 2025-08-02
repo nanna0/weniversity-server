@@ -3,6 +3,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
 from .models import User
+import random
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,6 +29,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["password"] = make_password(validated_data["password"])
+        if not validated_data.get("profile_image"):
+            default_images = [
+                'defaults/default1.png',
+                'defaults/default2.png',
+                'defaults/default3.png',
+            ]
+            validated_data['profile_image'] = random.choice(default_images)
+        user = User.objects.create_user(**validated_data)
         return super().create(validated_data)
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "rest_framework",
-    'rest_framework_simplejwt.token_blacklist',
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
@@ -122,9 +122,18 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 import os
+# 개발중 사용할 정적 파일 디렉토리 (이미지 등 직접 넣는 곳)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
+# collectstatic 명령어로 모아지는 정적 파일 디렉토리
+# 배포시 사용되는 정적 파일 디렉토리
+# 이 디렉토리는 서버에서 정적 파일을 제공할 때 사용됨
+# 예: Nginx, Apache 등에서 이 디렉토리를 참조하여 정적 파일을 서빙
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
+# 미디어 파일 경로
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
