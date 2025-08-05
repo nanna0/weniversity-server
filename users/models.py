@@ -16,9 +16,9 @@ class UserManager(BaseUserManager): # 관리자만들기위해
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("role", "admin")
-        extra_fields.setdefault("gender", "F")  # ✅ 추가
-        extra_fields.setdefault("name", "관리자")  # ✅ 추가
-        extra_fields.setdefault("birth_date", "2000-01-01")  # ✅ 추가
+        extra_fields.setdefault("gender", "M")
+        extra_fields.setdefault("name", "관리자")
+        extra_fields.setdefault("birth_date", "2000-01-01")
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True.")

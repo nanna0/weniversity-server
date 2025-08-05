@@ -1,5 +1,6 @@
 from datetime import datetime
 import random
+from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth import authenticate
 from rest_framework import status, permissions
@@ -33,26 +34,13 @@ class UserRegisterView(APIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
+# ✅ 관리자 페이지 접근 권한
+from .permissions import IsAdminUserRole
+class AdminDashboardView(APIView):
+    permission_classes = [IsAdminUserRole] # 관리자 권한 확인
 
-# ✅ 로그인 (기본 폼 방식)
-class UserLoginView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
-        user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            return Response(
-                {"message": "로그인 성공"},
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {"error": "잘못된 이메일 또는 비밀번호"},
-            status=status.HTTP_401_UNAUTHORIZED,
-        )
-
+    def get(self, request):
+        return Response({'message': '관리자 페이지입니다.'})
 
 # ✅ 로그아웃
 class LogoutView(APIView):
@@ -90,3 +78,29 @@ def health_check(request):
         },
         status=status.HTTP_200_OK,
     )
+
+# ✅ 마이페이지 조회/수정
+class MyPageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = UserSerializer(request.user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# ✅ 프로필 이미지 업로드
+class ProfileImageUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "프로필 이미지가 업데이트 되었습니다."}, serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

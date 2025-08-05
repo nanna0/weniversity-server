@@ -26,14 +26,13 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
         }
-
+    # 회원가입시 랜덤 사진 지정 
     def create(self, validated_data):
         validated_data["password"] = make_password(validated_data["password"])
         if not validated_data.get("profile_image"):
             default_images = [
                 'defaults/default1.png',
                 'defaults/default2.png',
-                'defaults/default3.png',
             ]
             validated_data['profile_image'] = random.choice(default_images)
         user = User.objects.create_user(**validated_data)
@@ -57,4 +56,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data = super().validate({"email": email, "password": password})
         data["email"] = user.email
+        data['role'] = user.role # 권한 정보 프론트엔드에 함께 전달
         return data
+    
+# 프로필 이미지 
+class ProfileImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['profile_image']
