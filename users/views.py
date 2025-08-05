@@ -12,8 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from .models import User
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer
-
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer, UserUpdateSerializer, UserPasswordChangeSerializer
 
 # ✅ 회원가입
 class UserRegisterView(APIView):
@@ -84,23 +83,23 @@ class MyPageView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = UserSerializer(request.user)
+        serializer = UserUpdateSerializer(request.user)
         return Response(serializer.data)
 
     def put(self, request):
-        serializer = UserSerializer(request.user, data=request.data)
+        serializer = UserUpdateSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# ✅ 프로필 이미지 업로드
-class ProfileImageUploadView(APIView):
+            return Response({"message": "회원정보가 수정되었습니다."})
+        return Response(serializer.errors, status=400)
+    
+# ✅ 비밀번호 변경
+class PasswordChangeView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        serializer = UserSerializer(request.user, data=request.data, partial=True)
+    def patch(self, request):
+        serializer = UserPasswordChangeSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "프로필 이미지가 업데이트 되었습니다."}, serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "비밀번호가 변경되었습니다."})
+        return Response(serializer.errors, status=400)

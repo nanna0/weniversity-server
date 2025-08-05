@@ -26,17 +26,21 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
         }
+    
     # 회원가입시 랜덤 사진 지정 
     def create(self, validated_data):
-        validated_data["password"] = make_password(validated_data["password"])
         if not validated_data.get("profile_image"):
             default_images = [
                 'defaults/default1.png',
                 'defaults/default2.png',
             ]
             validated_data['profile_image'] = random.choice(default_images)
-        user = User.objects.create_user(**validated_data)
-        return super().create(validated_data)
+
+        validated_data['password'] = make_password(validated_data['password'])    
+        user = User.objects.create(**validated_data)
+        return user
+    
+    
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = User.EMAIL_FIELD  # 기본은 'username', 우리는 'email'
@@ -59,8 +63,31 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['role'] = user.role # 권한 정보 프론트엔드에 함께 전달
         return data
     
-# 프로필 이미지 
-class ProfileImageSerializer(serializers.ModelSerializer):
+# 마이페이지 정보 수정
+class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['profile_image']
+        fields = ["name", "gender", "birth_date", "profile_image"]
+
+# 비밀번호 수정
+class UserPasswordChangeSerializer(serializers.Serializer):
+    current_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("현재 비밀번호가 틀렸습니다.")
+        return value
+
+    def validate_new_password(self, value):
+        # Django 비밀번호 검증 로직 (옵션)
+        from django.contrib.auth.password_validation import validate_password
+        validate_password(value)
+        return value
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
+        user.save()
+        return user

@@ -4,7 +4,7 @@ from .views import (
     CustomTokenObtainPairView,
     LogoutView,
     MyPageView,
-    ProfileImageUploadView,
+    PasswordChangeView,
     health_check,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -16,6 +16,6 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("mypage/", MyPageView.as_view(), name="my_page"),
-    path("mypage/profile-image/", ProfileImageUploadView.as_view(), name="my_page_profile_image"),
+    path('mypage/change-password/', PasswordChangeView.as_view(), name='change-password'),
     path("health/", health_check, name="health_check"),
 ]
