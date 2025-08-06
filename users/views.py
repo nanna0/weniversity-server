@@ -138,6 +138,7 @@ class PasswordResetRequestView(APIView):
             })
 
             # 이메일 발송
+            print(f"Sending password reset email to {email} with link: {reset_link}")
             send_mail(
                 subject,
                 message,
