@@ -25,10 +25,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include('users.urls')),
     # 비밀번호 재설정 API URL
-    # path('api/password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),
+    path('api/password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),
     # # API URL은 Postman 등으로 테스트, 실제 사용자는 아래 UI URL로 접속
     # # post 요청을 받는 api이므로 path 형식을 아래와 같이 수정
-    # path('api/password-reset/confirm/<str:uidb64>/<str:token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm_api'),
+    path('api/password-reset/confirm/<str:uidb64>/<str:token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm_api'),
 
     # 비밀번호 재설정 UI를 서빙하는 URL
     path('password-reset-confirm/<str:uidb64>/<str:token>/', 
