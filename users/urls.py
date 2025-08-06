@@ -5,9 +5,10 @@ from .views import (
     LogoutView,
     MyPageView,
     PasswordChangeView,
-    health_check,
+    health_check
 )
 from rest_framework_simplejwt.views import TokenRefreshView
+
 
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path("mypage/", MyPageView.as_view(), name="my_page"),
     path('mypage/change-password/', PasswordChangeView.as_view(), name='change-password'),
     path("health/", health_check, name="health_check"),
+ 
 ]

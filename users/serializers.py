@@ -91,3 +91,33 @@ class UserPasswordChangeSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+    
+# 비밀번호 재설정 요청 시 이메일 검증
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("해당 이메일을 가진 사용자가 존재하지 않습니다.")
+        return value
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    new_password1 = serializers.CharField(required=True, write_only=True)
+    new_password2 = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        if data['new_password1'] != data['new_password2']:
+            raise serializers.ValidationError("두 비밀번호가 일치하지 않습니다.")
+        
+        try:
+            # Django의 기본 비밀번호 검증 로직 사용
+            validate_password(data['new_password1'])
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
+            
+        return data

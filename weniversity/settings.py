@@ -122,6 +122,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 import os
+
+
 # 개발중 사용할 정적 파일 디렉토리 (이미지 등 직접 넣는 곳)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
@@ -190,3 +192,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://13.125.180.222/",
     "http://localhost:5173/",
 ]
+from dotenv import load_dotenv
+load_dotenv()
+# 이메일 설정
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+# 프론트엔드 비밀번호 재설정 페이지 주소 (나중에 만들 UI 페이지)
+# 개발용 FRONTEND_URL = "http://127.0.0.1:8000"
+FRONTEND_URL = "http://13.125.180.222:5173"

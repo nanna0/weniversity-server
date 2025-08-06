@@ -103,3 +103,72 @@ class PasswordChangeView(APIView):
             serializer.save()
             return Response({"message": "비밀번호가 변경되었습니다."})
         return Response(serializer.errors, status=400)
+    
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
+from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
+
+# 1. 비밀번호 재설정 요청을 받는 View
+class PasswordResetRequestView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            user = User.objects.get(email=email)
+
+            # 토큰 및 UID 생성
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            
+            # 재설정 링크 생성
+            reset_link = f"{settings.FRONTEND_URL}/password-reset-confirm/{uid}/{token}/"
+            
+            # 이메일 내용 템플릿화
+            subject = "[YourService] 비밀번호 재설정 안내"
+            message = render_to_string('emails/password_reset_email.html', {
+                'username': user.username,
+                'reset_link': reset_link,
+            })
+
+            # 이메일 발송
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                html_message=message # HTML 형식으로 이메일 보내기
+            )
+
+            return Response({"message": "비밀번호 재설정 이메일이 발송되었습니다."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# 2. 비밀번호 재설정 확인 및 변경 View
+class PasswordResetConfirmView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, uidb64, token, *args, **kwargs):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            if serializer.is_valid():
+                new_password = serializer.validated_data['new_password1']
+                user.set_password(new_password)
+                user.save()
+                return Response({"message": "비밀번호가 성공적으로 변경되었습니다."}, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({"error": "링크가 유효하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
