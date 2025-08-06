@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,8 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-!v&crw&due9l&p#tki55a8k1c*ce!vimv5(qf!&f2vgarvxh^m"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -121,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-import os
+
 
 
 # 개발중 사용할 정적 파일 디렉토리 (이미지 등 직접 넣는 곳)
@@ -192,8 +194,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://13.125.180.222/",
     "http://localhost:5173/",
 ]
-from dotenv import load_dotenv
-load_dotenv()
+
 # 이메일 설정
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 EMAIL_HOST = os.getenv('EMAIL_HOST')

@@ -87,10 +87,21 @@ class MyPageView(APIView):
         return Response(serializer.data)
 
     def put(self, request):
+         # --- 디버깅 코드 추가 ---
+        print("===================================")
+        print("1. VIEW DATA CHECK START")
+        print(f"request.user: {request.user}")
+        print(f"request.data: {request.data}")
+        # 파일 데이터는 request.FILES에 별도로 담깁니다. 이 부분이 가장 중요합니다.
+        print(f"request.FILES: {request.FILES}") 
+        print("1. VIEW DATA CHECK END")
+        print("===================================")
+        # --- 디버깅 코드 끝 ---
         serializer = UserUpdateSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "회원정보가 수정되었습니다."})
+        print("SERIALIZER ERRORS:", serializer.errors) 
         return Response(serializer.errors, status=400)
     
 # ✅ 비밀번호 변경
