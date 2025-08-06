@@ -189,9 +189,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    # "http://13.125.180.222/",
-    # "http://localhost:5173/",
-    "*",
+    "http://13.125.180.222/",
+    "http://localhost:5173/",
 ]
 from dotenv import load_dotenv
 load_dotenv()
