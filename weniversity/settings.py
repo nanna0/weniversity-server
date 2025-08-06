@@ -189,8 +189,9 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    "http://13.125.180.222/",
-    "http://localhost:5173/",
+    # "http://13.125.180.222/",
+    # "http://localhost:5173/",
+    "*",
 ]
 from dotenv import load_dotenv
 load_dotenv()
@@ -205,4 +206,4 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 # 프론트엔드 비밀번호 재설정 페이지 주소 (나중에 만들 UI 페이지)
 # 개발용 FRONTEND_URL = "http://127.0.0.1:8000"
-FRONTEND_URL = "http://13.125.180.222:5173"
+FRONTEND_URL = "http://13.125.180.222"
