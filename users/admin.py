@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import User
+from courses.models import Course, Chapter, Video
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -38,3 +39,24 @@ class UserAdmin(BaseUserAdmin):
     )
 
     search_fields = ('email', 'name')
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'type', 'level', 'price', 'created_at')
+    list_filter = ('category', 'type', 'level')
+    search_fields = ('title', 'description')
+    ordering = ('-created_at',)
+
+
+@admin.register(Chapter)
+class ChapterAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'course', 'created_at')
+    list_filter = ('course',)
+    search_fields = ('title',)
+
+
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'course', 'chapter', 'order', 'duration')
+    list_filter = ('course', 'chapter')
+    search_fields = ('title',)

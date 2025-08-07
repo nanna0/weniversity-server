@@ -24,6 +24,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include('users.urls')),
+    path('api/courses/', include('courses.urls')),
     # 비밀번호 재설정 API URL
     path('api/password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),
     # # API URL은 Postman 등으로 테스트, 실제 사용자는 아래 UI URL로 접속
