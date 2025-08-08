@@ -192,8 +192,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    "http://13.125.180.222/",
-    "http://localhost:5173/",
+    "*",
 ]
 
 # 이메일 설정
