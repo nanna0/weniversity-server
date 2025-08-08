@@ -19,6 +19,7 @@ class UserAdmin(BaseUserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
+    readonly_fields = ('created_at', 'updated_at')
 
     list_display = ('email', 'name', 'role', 'is_active', 'is_staff')
     list_filter = ('is_active', 'is_staff', 'role')
