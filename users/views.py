@@ -141,9 +141,10 @@ from django.template.loader import render_to_string
 
 # 1. 비밀번호 재설정 요청을 받는 View
 class PasswordResetRequestView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        
         serializer = PasswordResetRequestSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
