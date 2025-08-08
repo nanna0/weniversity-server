@@ -155,7 +155,7 @@ class PasswordResetRequestView(APIView):
 
             # 재설정 링크 생성
             reset_link = (
-                f"{settings.FRONTEND_URL}/api/password-reset-confirm/{uid}/{token}/"
+                f"{settings.FRONTEND_URL}/password-reset-confirm/{uid}/{token}/"
             )
 
             # 이메일 내용 템플릿화
