@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/password-reset/confirm/<str:uidb64>/<str:token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm_api'),
 
     # 비밀번호 재설정 UI를 서빙하는 URL
-    path('password-reset-confirm/<str:uidb64>/<str:token>/', 
+    path('api/password-reset-confirm/<str:uidb64>/<str:token>/', 
          TemplateView.as_view(template_name="password_reset_form.html"), 
          name='password_reset_confirm'),
 ]

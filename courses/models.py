@@ -53,3 +53,12 @@ class Video(models.Model):
     video_url = models.CharField(max_length=500)
     duration = models.IntegerField()
     order = models.IntegerField()
+
+
+class Instructor(models.Model):
+    instructor_id = models.AutoField(primary_key=True)  # PK
+    name = models.CharField(max_length=255)  # 강사명
+    code = models.IntegerField(unique=True)  # 강사 코드
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='instructors')
+    created_at = models.DateTimeField(auto_now_add=True)  # 생성일
+    affiliation = models.CharField(max_length=255, blank=True, null=True)  # 소속
