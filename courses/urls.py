@@ -5,7 +5,7 @@ from .views import CourseListView
 
 urlpatterns = [
     path('', CourseListView.as_view(), name='course-list'),
-    #path('<int:pk>/', CourseListView.as_view(), name='course-detail'),    
+    path('<int:pk>/', CourseListView.as_view(), name='course-detail'),
 
 ]
 #    list: GET /api/courses/ - 강의 목록 조회

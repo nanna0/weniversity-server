@@ -24,7 +24,7 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = [
             'course_id', 'title', 'category', 'type', 'level',
             'price', 'description', 'course_time', 'course_duedate',
-            'discord_url', 'created_at', 'chapters'
+            'discord_url', 'created_at', 'chapters', 'is_active'
         ]
 
 class InstructorSerializer(serializers.ModelSerializer):
@@ -36,5 +36,6 @@ class InstructorSerializer(serializers.ModelSerializer):
             'code',
             'course',
             'created_at',
-            'affiliation'
+            'affiliation',
+            "profile_image",
         ]

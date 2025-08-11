@@ -32,6 +32,7 @@ class Course(models.Model):
     course_duedate = models.DateTimeField()
     discord_url = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)  # 활성화 여부
 
     def __str__(self):
         return self.title
@@ -62,3 +63,4 @@ class Instructor(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='instructors')
     created_at = models.DateTimeField(auto_now_add=True)  # 생성일
     affiliation = models.CharField(max_length=255, blank=True, null=True)  # 소속
+    profile_image = models.ImageField(upload_to='instructor_profiles/', blank=True) # 강사 프로필 이미지
