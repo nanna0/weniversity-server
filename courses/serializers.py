@@ -5,7 +5,7 @@ from .models import Course, Chapter, Video, Instructor
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = ['video_id', 'title', 'video_url', 'duration', 'order']
+        fields = ['video_id', 'title', 'video_url', 'duration', 'order_index']
 
 
 class ChapterSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chapter
-        fields = ['chapter_id', 'title', 'order', 'videos']
+        fields = ['chapter_id', 'title', 'order_index', 'videos']
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -23,6 +23,15 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = "__all__"
 
+class CourseDetailSerializer(serializers.ModelSerializer):
+    chapters = ChapterSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Course
+        fields = ["course_id", "uuid", "order_index", "title", "category", "type", "level",
+                  "price", "description", "course_time", "course_duedate",
+                  "discord_url", "is_active", "created_at", "chapters"]
+        
 class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instructor

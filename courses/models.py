@@ -1,5 +1,5 @@
 # courses/models.py
-
+#import uuid
 from django.db import models
 
 class Course(models.Model):
@@ -22,6 +22,9 @@ class Course(models.Model):
 
 
     course_id = models.AutoField(primary_key=True)
+    #uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)  # 영구 식별자
+    order_index = models.PositiveIntegerField(default=0, db_index=True)  # 코스 리스트 표시 순서
+
     title = models.CharField(max_length=255)
     category = models.CharField(max_length=50)
     type = models.CharField(max_length=10, choices=Type.choices)
@@ -34,6 +37,9 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)  # 활성화 여부
 
+    class Meta:
+        ordering = ["order_index", "course_id"]  # 기본 정렬
+
     def __str__(self):
         return self.title
 
@@ -41,10 +47,18 @@ class Course(models.Model):
 class Chapter(models.Model):
     chapter_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
-    order = models.CharField(max_length=10)
+    order_index = models.PositiveIntegerField(default=0, db_index=True)
+    class Meta:
+        ordering = ["order_index", "chapter_id"]
+        constraints = [
+            models.UniqueConstraint(fields=["course", "order_index"],
+                                    name="uniq_chapter_order_per_course")
+        ]  # 같은 코스 내에서 order_index 중복 방지
     course = models.ForeignKey(Course, related_name='chapters', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"[{self.course.title}] {self.title}"
 
 class Video(models.Model):
     video_id = models.AutoField(primary_key=True)
@@ -53,8 +67,16 @@ class Video(models.Model):
     title = models.CharField(max_length=255)
     video_url = models.CharField(max_length=500)
     duration = models.IntegerField()
-    order = models.IntegerField()
+    order_index = models.PositiveIntegerField(default=0, db_index=True)
+    class Meta:
+        ordering = ["order_index", "video_id"]
+        constraints = [
+            models.UniqueConstraint(fields=["chapter", "order_index"],
+                                    name="uniq_video_order_per_chapter")
+        ]  # 같은 챕터 내에서 order_index 중복 방지
 
+    def __str__(self):
+        return f"[{self.chapter.title}] {self.title}"
 
 class Instructor(models.Model):
     instructor_id = models.AutoField(primary_key=True)  # PK

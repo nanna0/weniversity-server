@@ -13,10 +13,6 @@ class CourseFilter(django_filters.FilterSet):
         lookup_expr='icontains',
         help_text="강의 제목으로 검색"
     )
-    instructor = django_filters.CharFilter(
-        lookup_expr='icontains',
-        help_text="강사명으로 검색"
-    )
 
     # 숫자 범위 필터
     price_min = django_filters.NumberFilter(
@@ -49,7 +45,8 @@ class CourseFilter(django_filters.FilterSet):
     class Meta:
         model = Course
         fields = {
-            'category': ['exact'],  # exact는 그대로 두고
+            'category': ['exact'],
             'level': ['exact'],
+            'type': ['exact'],
             'is_active': ['exact'],
         }

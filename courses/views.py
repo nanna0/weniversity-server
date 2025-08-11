@@ -3,45 +3,27 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from .models import Course
 from .serializers import CourseSerializer
-
-class CourseListView(generics.ListAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = [AllowAny]
-
-
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.db.models import Q, Count
-from .models import Course
-from .serializers import CourseSerializer
 from .filters import CourseFilter
 
 class CourseViewSet(viewsets.ModelViewSet):
-    """
-    강의 ViewSet - CRUD 및 필터링 기능 제공
-    
-    list: GET /api/courses/ - 강의 목록 조회
-    create: POST /api/courses/ - 강의 생성
-    retrieve: GET /api/courses/{id}/ - 특정 강의 조회
-    update: PUT /api/courses/{id}/ - 강의 전체 수정
-    partial_update: PATCH /api/courses/{id}/ - 강의 부분 수정
-    destroy: DELETE /api/courses/{id}/ - 강의 삭제
-    """
     
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    
+    permission_classes = [AllowAny]
+
     # 필터링, 검색, 정렬 백엔드 설정
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = CourseFilter
     search_fields = ['title', 'description', 'instructor']  # 검색 가능한 필드
     ordering_fields = ['price', 'duration', 'created_at', 'title']  # 정렬 가능한 필드
-    ordering = ['-created_at']  # 기본 정렬 (최신순)
-    
+    ordering = ['order_index', '-created_at']  # 기본 정렬 (최신순)
+
     def get_queryset(self):
         """
         QuerySet 커스터마이징

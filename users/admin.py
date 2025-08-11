@@ -43,7 +43,7 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'type', 'level', 'price', 'created_at')
+    list_display = ('title', 'category', 'type', 'level', 'price', 'created_at', 'order_index')
     list_filter = ('category', 'type', 'level')
     search_fields = ('title', 'description')
     ordering = ('-created_at',)
@@ -51,13 +51,13 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
-    list_display = ('title', 'order', 'course', 'created_at')
+    list_display = ('title', 'order_index', 'course', 'created_at')
     list_filter = ('course',)
     search_fields = ('title',)
 
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course', 'chapter', 'order', 'duration')
+    list_display = ('title', 'course', 'chapter', 'order_index', 'duration')
     list_filter = ('course', 'chapter')
     search_fields = ('title',)
