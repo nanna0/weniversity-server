@@ -21,11 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = [
-            'course_id', 'title', 'category', 'type', 'level',
-            'price', 'description', 'course_time', 'course_duedate',
-            'discord_url', 'created_at', 'chapters', 'is_active'
-        ]
+        fields = "__all__"
 
 class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
