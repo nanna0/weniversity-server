@@ -46,19 +46,19 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         # 타입별 필터링
         type = self.request.query_params.get('type')
-        if category:
+        if type:
             queryset = queryset.filter(type__iexact=type)
             print(f"타입별 필터링 ({type}): {queryset.count()}개")
 
         # 레벨별 필터링
         level = self.request.query_params.get('level')
-        if category:
+        if level:
             queryset = queryset.filter(level__iexact=level)
             print(f"레벨별 필터링 ({level}): {queryset.count()}개")
         
         # 가격별 필터링
         price = self.request.query_params.get('price')
-        if category:
+        if price:
             queryset = queryset.filter(price__iexact=price)
             print(f"가격별 필터링 ({level}): {queryset.count()}개")
 
