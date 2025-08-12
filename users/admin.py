@@ -47,6 +47,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_filter = ('category', 'type', 'level')
     search_fields = ('title', 'description')
     ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'code')
 
 
 @admin.register(Chapter)

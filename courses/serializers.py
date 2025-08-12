@@ -30,11 +30,11 @@ class ChapterSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     chapters = ChapterSerializer(many=True, read_only=True)
     instructors = InstructorSerializer(many=True, read_only=True)
-
+    code_str = serializers.SerializerMethodField()
     class Meta:
         model = Course
         fields = "__all__"
-        
+
     def get_price_label(self, obj):
         if obj.price == 0:
             return "free"
@@ -42,6 +42,9 @@ class CourseSerializer(serializers.ModelSerializer):
             return "paid"
         else:
             return "gov"
+        
+    def get_code_str(self, obj):
+        return f"{obj.code:05d}" if obj.code is not None else None
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     chapters = ChapterSerializer(many=True, read_only=True)

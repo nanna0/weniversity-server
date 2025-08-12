@@ -1,6 +1,8 @@
 # courses/models.py
 #import uuid
-from django.db import models
+from django.db import models, transaction, IntegrityError
+from django.core.validators import MinValueValidator, MaxValueValidator
+import secrets
 
 class Course(models.Model):
     class Type(models.TextChoices):
@@ -24,7 +26,11 @@ class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
     #uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)  # 영구 식별자
     order_index = models.PositiveIntegerField(default=0, db_index=True)  # 코스 리스트 표시 순서
-
+    code = models.PositiveIntegerField(
+        unique=True, db_index=True,
+        validators=[MinValueValidator(10000), MaxValueValidator(99999)],
+        null=True, blank=True,
+    )
     title = models.CharField(max_length=255)
     category = models.CharField(max_length=50)
     type = models.CharField(max_length=10, choices=Type.choices)
@@ -38,6 +44,25 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)  # 활성화 여부
 
+    @staticmethod
+    def _gen_code_5digits() -> int:   # 인스턴스 메서드
+        return secrets.randbelow(90000) + 10000
+
+    def save(self, *args, **kwargs):
+        if self.code is None:
+            last_err = None
+            for _ in range(30):  # 유니크 충돌 시 재시도
+                self.code = self._gen_code_5digits()   # ← self 로 호출
+                try:
+                    with transaction.atomic():
+                        return super().save(*args, **kwargs)
+                except IntegrityError as e:
+                    self.code = None
+                    last_err = e
+                    continue
+            raise last_err or IntegrityError("5자리 코드 자동 발급 실패")
+        return super().save(*args, **kwargs)
+    
     class Meta:
         ordering = ["order_index", "course_id"]  # 기본 정렬
 
