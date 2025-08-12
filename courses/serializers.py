@@ -1,7 +1,18 @@
 from rest_framework import serializers
 from .models import Course, Chapter, Video, Instructor
 
-
+class InstructorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Instructor
+        fields = [
+            'instructor_id',
+            'name',
+            'code',
+            'course',
+            'created_at',
+            'affiliation',
+            "profile_image",
+        ]
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
@@ -18,6 +29,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     chapters = ChapterSerializer(many=True, read_only=True)
+    instructors = InstructorSerializer(many=True, read_only=True)
 
     class Meta:
         model = Course
@@ -32,15 +44,3 @@ class CourseDetailSerializer(serializers.ModelSerializer):
                   "price", "description", "course_time", "course_duedate",
                   "discord_url", "is_active", "created_at", "chapters"]
         
-class InstructorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Instructor
-        fields = [
-            'instructor_id',
-            'name',
-            'code',
-            'course',
-            'created_at',
-            'affiliation',
-            "profile_image",
-        ]

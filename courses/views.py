@@ -55,27 +55,21 @@ class CourseViewSet(viewsets.ModelViewSet):
         if level:
             queryset = queryset.filter(level__iexact=level)
             print(f"레벨별 필터링 ({level}): {queryset.count()}개")
-        
-        # 가격별 필터링
-        price = self.request.query_params.get('price')
-        if price:
-            queryset = queryset.filter(price__iexact=price)
-            print(f"가격별 필터링 ({level}): {queryset.count()}개")
 
-        # # 가격 범위 필터링
-        # min_price = self.request.query_params.get('min_price')
-        # max_price = self.request.query_params.get('max_price')
+        # 가격 범위 필터링
+        min_price = self.request.query_params.get('min_price')
+        max_price = self.request.query_params.get('max_price')
         
-        # if min_price:
-        #     queryset = queryset.filter(price__gte=min_price)
-        #     print(f"💰 최소 가격 필터링 ({min_price}원 이상): {queryset.count()}개")
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+            print(f"💰 최소 가격 필터링 ({min_price}원 이상): {queryset.count()}개")
             
-        # if max_price:
-        #     queryset = queryset.filter(price__lte=max_price)
-        #     print(f"💰 최대 가격 필터링 ({max_price}원 이하): {queryset.count()}개")
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
+            print(f"💰 최대 가격 필터링 ({max_price}원 이하): {queryset.count()}개")
         
-        # print(f"📊 최종 QuerySet: {queryset.count()}개 강의")
-        # return queryset
+        print(f"📊 최종 QuerySet: {queryset.count()}개 강의")
+        return queryset
     
     def list(self, request, *args, **kwargs):
         """

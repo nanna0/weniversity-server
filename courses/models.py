@@ -62,8 +62,8 @@ class Chapter(models.Model):
 
 class Video(models.Model):
     video_id = models.AutoField(primary_key=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name='videos', on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter, related_name='videos', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     video_url = models.CharField(max_length=500)
     duration = models.IntegerField()
@@ -86,3 +86,6 @@ class Instructor(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # 생성일
     affiliation = models.CharField(max_length=255, blank=True, null=True)  # 소속
     profile_image = models.ImageField(upload_to='instructor_profiles/', blank=True) # 강사 프로필 이미지
+    
+    def __str__(self):
+        return self.name
