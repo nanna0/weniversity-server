@@ -30,6 +30,7 @@ class Course(models.Model):
     type = models.CharField(max_length=10, choices=Type.choices)
     level = models.CharField(max_length=50)
     price = models.IntegerField()
+    price_type = models.CharField(max_length=10, choices=[("free", "무료"), ("paid", "유료"), ("gov", "국비")], default="paid")
     description = models.TextField()
     course_time = models.DateTimeField()
     course_duedate = models.DateTimeField()

@@ -1,52 +1,74 @@
-# filters.py
+# courses/filters.py
 import django_filters
+from django.db.models import Q, Value
+from django.db.models.functions import Lower, Replace
 from .models import Course
 
-class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
-    pass
+def _to_list(value):
+    if not value:
+        return []
+    if isinstance(value, (list, tuple)):
+        items = value
+    else:
+        items = str(value).split(",")
+    return [v.strip() for v in items if str(v).strip()]
+
+class IContainsAnyFilter(django_filters.BaseInFilter, django_filters.CharFilter):
+    """부분 일치(icontains), 쉼표/반복 파라미터 OR"""
+    def filter(self, qs, value):
+        terms = _to_list(value)
+        if not terms:
+            return qs
+        q = Q()
+        for t in terms:
+            q |= Q(**{f"{self.field_name}__icontains": t})
+        return qs.filter(q)
+
+class NormalizedIExactAnyFilter(django_filters.BaseInFilter, django_filters.CharFilter):
+    """
+    공백 제거 + 소문자 정규화 후 정확 일치, 쉼표/반복 파라미터 OR
+    예: '데이터 분석' == '데이터분석'
+    """
+    def filter(self, qs, value):
+        vals = _to_list(value)
+        if not vals:
+            return qs
+        alias = f"norm_{self.field_name}"  # '__' 금지
+        qs = qs.annotate(**{
+            alias: Replace(Lower(self.field_name), Value(" "), Value(""))
+        })
+        cond = Q()
+        for v in vals:
+            cond |= Q(**{alias: v.lower().replace(" ", "")})
+        return qs.filter(cond)
 
 class CourseFilter(django_filters.FilterSet):
-    """강의 필터 클래스"""
+    # title: 부분 일치 다중(OR)
+    title = IContainsAnyFilter(field_name="title")
 
-    # 텍스트 검색 (부분 일치)
-    title = django_filters.CharFilter(
-        lookup_expr='icontains',
-        help_text="강의 제목으로 검색"
-    )
+    # category/type/level: 공백무시 정확 일치 다중(OR)
+    category = NormalizedIExactAnyFilter(field_name="category")
+    type     = NormalizedIExactAnyFilter(field_name="type")
+    level    = NormalizedIExactAnyFilter(field_name="level")
 
-    # 숫자 범위 필터
-    price_min = django_filters.NumberFilter(
-        field_name='price',
-        lookup_expr='gte',
-        help_text="최소 가격"
-    )
-    price_max = django_filters.NumberFilter(
-        field_name='price',
-        lookup_expr='lte',
-        help_text="최대 가격"
-    )
+    # price_type: free(=0), paid(>0), gov(<0) 다중(OR)
+    price_type = django_filters.CharFilter(method="filter_price_type")
 
-    # 날짜 범위 필터
-    created_after = django_filters.DateTimeFilter(
-        field_name='created_at',
-        lookup_expr='gte',
-        help_text="생성일 이후"
-    )
-    created_before = django_filters.DateTimeFilter(
-        field_name='created_at',
-        lookup_expr='lte',
-        help_text="생성일 이전"
-    )
-
-    # 콤마 구분 다중 값 필터(선택) — CharField/ChoiceField인 경우
-    category_in = CharInFilter(field_name='category', lookup_expr='in', help_text="카테고리 목록")
-    level_in = CharInFilter(field_name='level', lookup_expr='in', help_text="난이도 목록")
+    def filter_price_type(self, qs, name, value):
+        kinds = _to_list(value)
+        if not kinds:
+            return qs
+        cond = Q()
+        for k in kinds:
+            k = k.lower()
+            if k == "free":
+                cond |= Q(price=0)
+            elif k == "paid":
+                cond |= Q(price__gt=0)
+            elif k == "gov":
+                cond |= Q(price__lt=0)
+        return qs.filter(cond)
 
     class Meta:
         model = Course
-        fields = {
-            'category': ['exact'],
-            'level': ['exact'],
-            'type': ['exact'],
-            'is_active': ['exact'],
-        }
+        fields = []  # 커스텀 정의만 사용

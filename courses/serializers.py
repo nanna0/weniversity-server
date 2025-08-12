@@ -34,6 +34,14 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = "__all__"
+        
+    def get_price_label(self, obj):
+        if obj.price == 0:
+            return "free"
+        elif obj.price > 0:
+            return "paid"
+        else:
+            return "gov"
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     chapters = ChapterSerializer(many=True, read_only=True)
