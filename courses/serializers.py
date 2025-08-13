@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Course, Chapter, Video, Instructor
-
+from .models import Course, Chapter, Video, Instructor, Enrollment
+from django.core.validators import FileExtensionValidator
 class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instructor
@@ -17,11 +17,11 @@ class InstructorSerializer(serializers.ModelSerializer):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = ['video_id', 'title', 'video_url', 'duration', 'order_index']
+        fields = ['video_id', 'title', 'video_file', 'duration', 'order_index']
 
 
 class ChapterSerializer(serializers.ModelSerializer):
-    videos = VideoSerializer(source='video_set', many=True, read_only=True)
+    videos = VideoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Chapter
@@ -52,7 +52,18 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ["course_id", "uuid", "order_index", "title", "category", "type", "level",
+        fields = ["course_id", "order_index", "title", "category", "type", "level",
                   "price", "description", "course_time", "course_duedate",
                   "discord_url", "is_active", "created_at", "chapters", "course_image", "code"]
         
+class CourseMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['course_id', 'title', 'description']   # 필요 시 fields 축소/확장
+
+class MyCourseSerializer(serializers.ModelSerializer):
+    course = CourseMiniSerializer(read_only=True)
+
+    class Meta:
+        model = Enrollment
+        fields = ['course', 'status', 'progress', 'enrolled_at']

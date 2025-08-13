@@ -21,11 +21,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users.views import PasswordResetRequestView, PasswordResetConfirmView
 from django.views.generic import TemplateView
+from courses.views import MyCourseListView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/users/", include("users.urls")),
     path("api/courses/", include("courses.urls")),
+    path('api/my-courses/', MyCourseListView.as_view(), name='my-courses'),
     # 비밀번호 재설정 API URL
     path(
         "api/password-reset/",

@@ -4,6 +4,8 @@ from django.db import models, transaction, IntegrityError
 from django.core.validators import MinValueValidator, MaxValueValidator
 import secrets
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 
 class Course(models.Model):
     class Type(models.TextChoices):
@@ -47,12 +49,14 @@ class Course(models.Model):
     course_image = models.ImageField(upload_to='course/', blank=True) # 코스 이미지
     
     # User와 M2M (중간모델 Enrollment를 통해 연결)
-    # students = models.ManyToManyField(
-    #     settings.AUTH_USER_MODEL,
-    #     through='Enrollment',
-    #     related_name='courses',          # user.courses 로 접근
-    # )
-
+    students = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='Enrollment',
+        related_name='courses',          # user.courses 로 접근
+    )
+    def __str__(self):
+        return self.title
+    
     @staticmethod
     def _gen_code_5digits() -> int:   # 인스턴스 메서드
         return secrets.randbelow(90000) + 10000
@@ -94,13 +98,22 @@ class Chapter(models.Model):
 
     def __str__(self):
         return f"[{self.course.title}] {self.title}"
-
+def validate_file_size(f):
+    limit = getattr(settings, "MAX_UPLOAD_SIZE", 200 * 1024 * 1024)  # 기본 200MB
+    if f.size > limit:
+        raise ValidationError(f"파일이 너무 큽니다. 최대 {limit/1024/1024:.0f}MB")
+    
 class Video(models.Model):
     video_id = models.AutoField(primary_key=True)
     course = models.ForeignKey(Course, related_name='videos', on_delete=models.CASCADE)
     chapter = models.ForeignKey(Chapter, related_name='videos', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    video_url = models.CharField(max_length=500)
+    video_file = models.FileField(upload_to='video/', blank=True, null=True, 
+                                  validators=[
+                                    FileExtensionValidator(['mp4','mov','mkv','webm','avi']),
+                                    validate_file_size,
+                                ], 
+                                  )
     duration = models.IntegerField()
     order_index = models.PositiveIntegerField(default=0, db_index=True)
     class Meta:
@@ -125,4 +138,32 @@ class Instructor(models.Model):
     
     def __str__(self):
         return self.name
-    
+
+# 수강 신청 모델   
+class Enrollment(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = 'active', 'Active'
+        COMPLETED = 'completed', 'Completed'
+        DROPPED = 'dropped', 'Dropped'
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='course_enrollments',
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='enrollments',
+    )
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.ACTIVE)
+    enrolled_at = models.DateTimeField(auto_now_add=True) # 등록일시
+    expired_at = models.DateTimeField(null=True, blank=True)  # 만료일시
+    progress = models.DecimalField(max_digits=5, decimal_places=2, default=0)  # 0~100 같은 퍼센트
+
+    class Meta:
+        unique_together = ('user', 'course')  # 같은 유저-코스 중복 방지
+        indexes = [models.Index(fields=['user', 'course'])]
+
+    def __str__(self):
+        return f'{self.user} ↔ {self.course} ({self.status})'
