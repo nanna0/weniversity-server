@@ -3,6 +3,7 @@
 from django.db import models, transaction, IntegrityError
 from django.core.validators import MinValueValidator, MaxValueValidator
 import secrets
+from django.conf import settings
 
 class Course(models.Model):
     class Type(models.TextChoices):
@@ -43,6 +44,14 @@ class Course(models.Model):
     discord_url = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)  # 활성화 여부
+    course_image = models.ImageField(upload_to='course/', blank=True) # 코스 이미지
+    
+    # User와 M2M (중간모델 Enrollment를 통해 연결)
+    # students = models.ManyToManyField(
+    #     settings.AUTH_USER_MODEL,
+    #     through='Enrollment',
+    #     related_name='courses',          # user.courses 로 접근
+    # )
 
     @staticmethod
     def _gen_code_5digits() -> int:   # 인스턴스 메서드
@@ -107,6 +116,7 @@ class Video(models.Model):
 class Instructor(models.Model):
     instructor_id = models.AutoField(primary_key=True)  # PK
     name = models.CharField(max_length=255)  # 강사명
+    english_name = models.CharField(max_length=255, blank=True, null=True)  # 영어 이름   
     code = models.IntegerField(unique=True)  # 강사 코드
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='instructors')
     created_at = models.DateTimeField(auto_now_add=True)  # 생성일
@@ -115,3 +125,4 @@ class Instructor(models.Model):
     
     def __str__(self):
         return self.name
+    

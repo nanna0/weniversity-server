@@ -7,6 +7,7 @@ class InstructorSerializer(serializers.ModelSerializer):
         fields = [
             'instructor_id',
             'name',
+            'english_name',
             'code',
             'course',
             'created_at',
@@ -53,5 +54,5 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         model = Course
         fields = ["course_id", "uuid", "order_index", "title", "category", "type", "level",
                   "price", "description", "course_time", "course_duedate",
-                  "discord_url", "is_active", "created_at", "chapters"]
+                  "discord_url", "is_active", "created_at", "chapters", "course_image", "code"]
         

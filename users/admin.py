@@ -43,7 +43,7 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'type', 'level', 'price', 'created_at', 'order_index')
+    list_display = ('title', 'category', 'type', 'level', 'price', 'created_at', 'order_index', 'course_id', 'is_active')
     list_filter = ('category', 'type', 'level')
     search_fields = ('title', 'description')
     ordering = ('-created_at',)
