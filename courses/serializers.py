@@ -67,3 +67,4 @@ class MyCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = ['course', 'status', 'progress', 'enrolled_at']
+

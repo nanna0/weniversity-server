@@ -1,11 +1,15 @@
 # courses/views.py
 from django.db.models import Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.views import APIView
 from .models import Course, Chapter, Video, Instructor, Enrollment
 from .serializers import CourseSerializer, MyCourseSerializer
 from .filters import CourseFilter
-from rest_framework import generics, permissions, filters
+from django.db import transaction
+from rest_framework import generics, permissions, filters, status
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 class CourseViewSet(ReadOnlyModelViewSet):
     serializer_class = CourseSerializer
@@ -51,3 +55,31 @@ class MyCourseListView(generics.ListAPIView):
                 .filter(user=self.request.user)
                 .select_related('course')       # N+1 방지
                 )
+    
+class EnrollCourseView(APIView):
+    """수강신청: 이미 있으면 ACTIVE로 전환(멱등)"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    @transaction.atomic
+    def post(self, request, course_id:int):
+        course = get_object_or_404(Course, pk=course_id, is_active=True)
+
+        # 이미 Enrollment가 있으면 상태만 ACTIVE로 갱신, 없으면 생성
+        enr, created = Enrollment.objects.update_or_create(
+            user=request.user,
+            course=course,
+            defaults={
+                'status': Enrollment.Status.ACTIVE,
+                'expired_at': None,  # 재활성화 시 만료 초기화
+            }
+        )
+
+        return Response(
+            {
+                'enrollment_id': enr.id,           # Enrollment의 PK (자동 생성)
+                'course_id': course.course_id,
+                'is_enrolled': True,
+                'status': enr.status,
+            },
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        )
