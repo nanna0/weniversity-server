@@ -9,6 +9,7 @@ from .views import (
     PasswordResetRequestView,
     PasswordResetConfirmView,
 )
+from courses.views import MyLikedCoursesView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 
@@ -19,6 +20,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("mypage/", MyPageView.as_view(), name="my_page"),
+    path('mypage/likes/', MyLikedCoursesView.as_view(), name='my-liked-courses'),
     path('mypage/change-password/', PasswordChangeView.as_view(), name='change-password'),
     path("health/", health_check, name="health_check"),
     # path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),

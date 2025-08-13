@@ -49,7 +49,7 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     profile_image = models.ImageField(upload_to='profiles/', blank=True)
-    
+    course = models.ManyToManyField('courses.Course', related_name='users', blank=True)
     
     
     objects = UserManager()

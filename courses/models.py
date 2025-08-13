@@ -54,6 +54,13 @@ class Course(models.Model):
         through='Enrollment',
         related_name='courses',          # user.courses 로 접근
     )
+
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='CourseLike',
+        related_name='liked_courses',
+        blank=True,
+    )
     def __str__(self):
         return self.title
     
@@ -167,3 +174,17 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f'{self.user} ↔ {self.course} ({self.status})'
+    
+# 강의 좋아요
+class CourseLike(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='course_likes'
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name='likes'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'course')  # 같은 유저가 같은 강의를 중복 좋아요 방지
+        indexes = [models.Index(fields=['user', 'course'])]

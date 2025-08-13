@@ -2,8 +2,8 @@
 from django.db.models import Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.views import APIView
-from .models import Course, Chapter, Video, Instructor, Enrollment
-from .serializers import CourseSerializer, MyCourseSerializer
+from .models import Course, Chapter, Video, Instructor, Enrollment, CourseLike
+from .serializers import CourseSerializer, MyCourseSerializer, MyLikedCourseSerializer
 from .filters import CourseFilter
 from django.db import transaction
 from rest_framework import generics, permissions, filters, status
@@ -83,3 +83,34 @@ class EnrollCourseView(APIView):
             },
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
         )
+    
+class CourseLikeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @transaction.atomic
+    def post(self, request, course_id:int):
+        """좋아요 (멱등). 이미 있으면 그대로 200."""
+        course = get_object_or_404(Course, pk=course_id, is_active=True)
+        like, created = CourseLike.objects.get_or_create(user=request.user, course=course)
+        return Response(
+            {'course_id': course.course_id, 'is_liked': True},
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        )
+
+    @transaction.atomic
+    def delete(self, request, course_id:int):
+        """좋아요 취소 (행 삭제)"""
+        course = get_object_or_404(Course, pk=course_id)
+        CourseLike.objects.filter(user=request.user, course=course).delete()
+        return Response({'course_id': course.course_id, 'is_liked': False}, status=status.HTTP_200_OK)
+    
+class MyLikedCoursesView(generics.ListAPIView):
+    """GET /api/users/mypage/likes  -> 내가 좋아요한 코스 리스트"""
+    serializer_class = MyLikedCourseSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return (CourseLike.objects
+                .filter(user=self.request.user)
+                .select_related('course')
+                .order_by('-created_at'))

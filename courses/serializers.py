@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course, Chapter, Video, Instructor, Enrollment
+from .models import Course, Chapter, Video, Instructor, Enrollment, CourseLike
 from django.core.validators import FileExtensionValidator
 class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,6 +31,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     chapters = ChapterSerializer(many=True, read_only=True)
     instructors = InstructorSerializer(many=True, read_only=True)
+    is_liked = serializers.BooleanField(read_only=True)
     code_str = serializers.SerializerMethodField()
     class Meta:
         model = Course
@@ -67,4 +68,18 @@ class MyCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = ['course', 'status', 'progress', 'enrolled_at']
+
+
+class CourseMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['course_id', 'title', 'description', 'course_image']
+
+class MyLikedCourseSerializer(serializers.ModelSerializer):
+    course = CourseMiniSerializer(read_only=True)
+    liked_at = serializers.DateTimeField(source='created_at', read_only=True)
+
+    class Meta:
+        model = CourseLike
+        fields = ['course', 'liked_at']
 
