@@ -2,7 +2,7 @@
 import django_filters
 from django.db.models import Q, Value
 from django.db.models.functions import Lower, Replace
-from .models import Course
+from .models import Course, Enrollment
 
 def _to_list(value):
     if not value:
@@ -72,3 +72,13 @@ class CourseFilter(django_filters.FilterSet):
     class Meta:
         model = Course
         fields = []  # 커스텀 정의만 사용
+
+class MyCourseFilter(django_filters.FilterSet):
+
+    # category/type/level: 공백무시 정확 일치 다중(OR)
+    status = NormalizedIExactAnyFilter(field_name="status")
+    type = NormalizedIExactAnyFilter(field_name="course__type")
+
+    class Meta:
+        model = Enrollment
+        fields = ["user", "course", "status", "type", "progress"]

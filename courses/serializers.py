@@ -56,24 +56,20 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         fields = ["course_id", "order_index", "title", "category", "type", "level",
                   "price", "description", "course_time", "course_duedate",
                   "discord_url", "is_active", "created_at", "chapters", "course_image", "code"]
-        
+
 class CourseMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['course_id', 'title', 'description']   # 필요 시 fields 축소/확장
+        fields = ['course_id', 'title', 'description', 'course_image']   
 
 class MyCourseSerializer(serializers.ModelSerializer):
     course = CourseMiniSerializer(read_only=True)
+    type = serializers.CharField(source='course.type', read_only=True)  # FK 접근
 
     class Meta:
         model = Enrollment
-        fields = ['course', 'status', 'progress', 'enrolled_at']
+        fields = ['course', 'status', 'progress', 'enrolled_at', 'expired_at', "type"]
 
-
-class CourseMiniSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['course_id', 'title', 'description', 'course_image']
 
 class MyLikedCourseSerializer(serializers.ModelSerializer):
     course = CourseMiniSerializer(read_only=True)

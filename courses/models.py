@@ -163,6 +163,10 @@ class Enrollment(models.Model):
         on_delete=models.CASCADE,
         related_name='enrollments',
     )
+    @property
+    def type(self):
+        return getattr(self.course, "type", None)  # Course.type 혹은 FK면 적절히 접근
+
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.ACTIVE)
     enrolled_at = models.DateTimeField(auto_now_add=True) # 등록일시
     expired_at = models.DateTimeField(null=True, blank=True)  # 만료일시

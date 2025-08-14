@@ -4,7 +4,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.views import APIView
 from .models import Course, Chapter, Video, Instructor, Enrollment, CourseLike
 from .serializers import CourseSerializer, MyCourseSerializer, MyLikedCourseSerializer
-from .filters import CourseFilter
+from .filters import CourseFilter, MyCourseFilter
 from django.db import transaction
 from rest_framework import generics, permissions, filters, status
 from django_filters.rest_framework import DjangoFilterBackend
@@ -27,22 +27,9 @@ class CourseViewSet(ReadOnlyModelViewSet):
         )
     
 class MyCourseListView(generics.ListAPIView):
+    queryset = Enrollment.objects.select_related("course")
     serializer_class = MyCourseSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['status']               # ?status=active
-    search_fields = ['course__title']           # ?search=파이썬
-    ordering_fields = ['enrolled_at', 'course__title']  # ?ordering=-enrolled_at
-    ordering = ['-enrolled_at']                 # 기본 최신 등록순
-
-    def get_queryset(self):
-        return (Enrollment.objects
-                .filter(user=self.request.user)
-                .select_related('course')       # N+1 방지
-                )
-    
-class MyCourseListView(generics.ListAPIView):
-    serializer_class = MyCourseSerializer
+    filterset_class = MyCourseFilter
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['status']               # ?status=active
