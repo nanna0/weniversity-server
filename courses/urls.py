@@ -9,7 +9,7 @@ router.register(r'', CourseViewSet, basename='courses')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('enroll/<int:course_id>', EnrollCourseView.as_view(), name='enroll-course'),
-    path('<int:course_id>/like', CourseLikeView.as_view()),
+    path('enroll/<int:course_id>/', EnrollCourseView.as_view(), name='enroll-course'),
+    path('<int:course_id>/like/', CourseLikeView.as_view()),
 ]
 

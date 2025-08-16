@@ -20,19 +20,25 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "created_at",
             "updated_at",
-            "profile_image",
+            "profile_image_url",
         ]
         read_only_fields = ["id", "is_active", "created_at", "updated_at"]
         extra_kwargs = {
             "password": {"write_only": True},
         }
+    def get_profile_image_url(self, obj):
+        if not obj.profile_image:
+            return None
+        request = self.context.get("request")
+        url = obj.profile_image.url  # '/media/…' 형태
+        return request.build_absolute_uri(url) if request else url
     
     # 회원가입시 랜덤 사진 지정 
     def create(self, validated_data):
         if not validated_data.get("profile_image"):
             default_images = [
-                'defaults/default1.png',
-                'defaults/default2.png',
+                'profiles/default1.png',
+                'profiles/default2.png',
             ]
             validated_data['profile_image'] = random.choice(default_images)
 
@@ -59,8 +65,22 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError("비밀번호가 틀렸습니다.")
 
         data = super().validate({"email": email, "password": password})
-        data["email"] = user.email
-        data['role'] = user.role # 권한 정보 프론트엔드에 함께 전달
+        request = self.context.get("request")
+        profile_url = None
+        if user.profile_image:
+            try:
+                profile_url = user.profile_image.url  # '/media/...' (문자열)
+                if request:
+                    profile_url = request.build_absolute_uri(profile_url)
+            except ValueError:
+                profile_url = None
+
+        data.update({
+            "email": user.email,
+            "name": user.name,
+            "role": user.role,
+            "profile_image_url": profile_url,  # <-- bytes 대신 URL 문자열
+        })
         return data
     
 # 마이페이지 정보 수정
