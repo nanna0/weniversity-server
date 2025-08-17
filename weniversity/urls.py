@@ -27,6 +27,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/users/", include("users.urls")),
     path("api/courses/", include("courses.urls")),
+    path("api/missions/", include("missions.urls")),
     path('api/my-courses/', MyCourseListView.as_view(), name='my-courses'),
     # 비밀번호 재설정 API URL
     path(
