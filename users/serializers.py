@@ -7,6 +7,9 @@ import random
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # 'profile_image_url'을 SerializerMethodField로 명시적으로 정의
+    profile_image_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
         fields = [
@@ -19,7 +22,8 @@ class UserSerializer(serializers.ModelSerializer):
             "role",
             "is_active",
             "created_at",
-            "updated_at"
+            "updated_at",
+            "profile_image_url",
         ]
         read_only_fields = ["id", "is_active", "created_at", "updated_at"]
         extra_kwargs = {
@@ -86,7 +90,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["name", "gender", "birth_date", "profile_image"]
+        fields = ["email", "name", "gender", "birth_date", "profile_image"]
 
 # 비밀번호 수정
 class UserPasswordChangeSerializer(serializers.Serializer):
