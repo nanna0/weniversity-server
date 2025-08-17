@@ -164,7 +164,7 @@ class PasswordResetRequestView(APIView):
             message = render_to_string(
                 "emails/password_reset_email.html",
                 {
-                    "username": user.username,
+                    "username": user.name,
                     "reset_link": reset_link,
                 },
             )
