@@ -282,7 +282,6 @@ gantt
 ## 데이터베이스 모델링 (ERD)
 ```mermaid
 erDiagram
-  %% Auto-generated from db.sqlite3 (Mermaid-friendly)
   auth_group {
     int id PK
     string name
@@ -303,7 +302,7 @@ erDiagram
     string title
     datetime created_at
     int course_id
-    int order_index   %% unsigned
+    uint order_index
   }
   courses_course {
     int course_id PK
@@ -318,9 +317,9 @@ erDiagram
     string discord_url
     datetime created_at
     bool is_active
-    int order_index   %% unsigned
+    uint order_index
     string price_type
-    int code          %% unsigned
+    uint code
     string course_image
   }
   courses_courselike {
@@ -354,14 +353,14 @@ erDiagram
     int duration
     int chapter_id
     int course_id
-    int order_index   %% unsigned
+    uint order_index
     string video_file
   }
   django_admin_log {
     int id PK
     text object_id
     string object_repr
-    smallint action_flag  %% unsigned
+    usmallint action_flag
     text change_message
     int content_type_id
     int user_id
