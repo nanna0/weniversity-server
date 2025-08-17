@@ -48,6 +48,9 @@ urlpatterns = [
         TemplateView.as_view(template_name="password_reset_form.html"),
         name="password_reset_confirm",
     ),
+
+    #watch
+    path('api/', include('watch.urls')),
 ]
 
 if settings.DEBUG:
