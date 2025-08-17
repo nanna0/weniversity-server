@@ -19,8 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
             "role",
             "is_active",
             "created_at",
-            "updated_at",
-            "profile_image_url",
+            "updated_at"
         ]
         read_only_fields = ["id", "is_active", "created_at", "updated_at"]
         extra_kwargs = {
