@@ -207,250 +207,249 @@ gantt
     excludes    weekends
 
     section 프로젝트 준비 (나영)
-    프로젝트 킥오프 미팅                     :2025-07-29 1d
-    요구사항 분석 및 기술 스택 결정            :2025-07-29, 1d
-    ERD 작성                             :2025-07-29, 1d
+    프로젝트 킥오프 미팅                :2025-07-29, 1d
+    요구사항 분석 및 기술 스택 결정       :2025-07-29, 1d
+    ERD 작성                          :2025-07-29, 1d
 
     section 배포 환경 설정 (나영)
-    main.yaml 파일 작성                   :2025-07-31, 1d
-    github CI/CD action 설정             :2025-07-31, 1d
-    배포 서버 ubuntu 설정                  :2025-07-31, 1d
-    nginx, gunicorn 설정                 :2025-07-31, 1d
-
+    main.yaml 파일 작성                :2025-07-31, 1d
+    GitHub CI/CD Action 설정          :2025-07-31, 1d
+    배포 서버 Ubuntu 설정              :2025-07-31, 1d
+    Nginx·Gunicorn 설정               :2025-07-31, 1d
 
     section 모델 작성 (나영)
-    users 모델 작성                       :2025-07-30, 1d
-    Intructor 모델 작성                   :2025-08-06, 1d
-    courses 모델 작성                     :2025-08-07, 1d
-    chapter 모델 작성                     :2025-08-07, 1d
-    videos 모델 작성                      :2025-08-07, 1d
-    Enrollment 모델 작성                  :2025-08-12, 1d
-    missions 모델 작성                    :
-
+    users 모델 작성                    :2025-07-30, 1d
+    Instructor 모델 작성               :2025-08-06, 1d
+    courses 모델 작성                  :2025-08-07, 1d
+    chapter 모델 작성                  :2025-08-07, 1d
+    videos 모델 작성                   :2025-08-07, 1d
+    Enrollment 모델 작성               :2025-08-12, 1d
+    missions 모델 작성                 :2025-08-12, 1d
 
     section user 앱 (나영)
-    회원가입 기능 구현                       :2025-08-01, 1d
-    로그인/로그아웃 기능 구현                  :2025-08-01, 1d
-    사용자 프로필 CRUD 구현                  :2025-08-02, 1d
-    프로필 이미지 랜덤 설정 구현                :2025-08-02, 1d
-    권한 설정 구현                          :2025-08-03, 1d
-    비밀번호 변경 이메일 전송 로직 구현          :2025-08-03, 1d
-    users 앱 단위 테스트                    :2025-08-04, 1d
+    회원가입 기능 구현                  :2025-08-01, 1d
+    로그인/로그아웃 기능 구현             :2025-08-01, 1d
+    사용자 프로필 CRUD 구현             :2025-08-02, 1d
+    프로필 이미지 랜덤 설정 구현           :2025-08-02, 1d
+    권한 설정 구현                     :2025-08-03, 1d
+    비밀번호 변경 이메일 전송 로직 구현     :2025-08-03, 1d
+    users 앱 단위 테스트               :2025-08-04, 1d
 
     section courses 앱 (나영)
-    과목 CRUD 기능 어드민 구현                     :2025-08-05, 1d
-    과목 필터 검색 및 페이지네이션 구현                :2025-08-05, 1d
-    강사 CRUD 기능 어드민 구현                     :2025-08-06, 1d
-    강사 프로필 등록, course 연결                  :2025-08-07, 1d
-    과목 필터 다중검색 구현                        :2025-08-08, 1d
-    과목 가격별 범위 구현                          :2025-08-11, 1d
-    과목 조회 기능 구현                           :2025-08-12, 1d
-    chapter, video 단위 구현                    :2025-08-12, 1d
-    courses 앱 단위 테스트                       :2025-08-13, 1d
+    과목 CRUD 기능 어드민 구현           :2025-08-05, 1d
+    과목 필터 검색 및 페이지네이션 구현     :2025-08-05, 1d
+    강사 CRUD 기능 어드민 구현           :2025-08-06, 1d
+    강사 프로필 등록, course 연결        :2025-08-07, 1d
+    과목 필터 다중검색 구현              :2025-08-08, 1d
+    과목 가격별 범위 구현                :2025-08-11, 1d
+    과목 조회 기능 구현                 :2025-08-12, 1d
+    chapter, video 단위 구현            :2025-08-12, 1d
+    courses 앱 단위 테스트              :2025-08-13, 1d
 
     section enrollment(my-course) 앱 (나영)
-    수강신청 구현                                :2025-08-13, 1d
-    내가 신청한 과목 조회, 수강률 구현                :2024-08-13, 1d
-    강의 좋아요, 내가 좋아한 강의 리스트 구현          :2025-08-14, 1d
-    내가 신청한 강의 필터 검색 구현                  :2025-08-14, 1d
-    enrollment 앱 단위 테스트                    :2024-08-14, 1d
-
+    수강신청 구현                      :2025-08-13, 1d
+    내가 신청한 과목 조회·수강률 구현      :2025-08-13, 1d
+    강의 좋아요·내가 좋아한 강의 리스트     :2025-08-14, 1d
+    내가 신청한 강의 필터 검색 구현        :2025-08-14, 1d
+    enrollment 앱 단위 테스트           :2025-08-14, 1d
 
     section missions 앱 (여밈)
-
+    미션 발급/제출 기본 플로우            :2025-08-15, 1d
 
     section videos 앱 (여밈)
-
+    동영상 업로드/스트리밍 기본 기능        :2025-08-15, 1d
 
     section 통합 및 테스트
-    앱 간 통합 작업                         :2025-08-15, 1d
-    통합 테스트                             :2025-08-15, 1d
-    사용자 시나리오 기반 전체 테스트             :2025-08-16, 1d
-    성능 테스트                             :2025-08-16, 1d
+    앱 간 통합 작업                    :2025-08-15, 1d
+    통합 테스트                        :2025-08-15, 1d
+    사용자 시나리오 기반 전체 테스트        :2025-08-16, 1d
+    성능 테스트                        :2025-08-16, 1d
 
     section 마무리
-    발견된 버그 수정                         :2025-08-16, 1d
-    최종 점검                              :2025-08-16, 1d
+    발견된 버그 수정                   :2025-08-16, 1d
+    최종 점검                         :2025-08-16, 1d
 
     section 프로젝트 마무리
-    최종 테스트 및 QA                       :2025-08-17, 1d
-    프로젝트 문서화 완료                      :2025-08-17, 1d
-    최종 발표 자료 준비                      :2025-08-17, 1d
+    최종 테스트 및 QA                 :2025-08-17, 1d
+    프로젝트 문서화 완료                :2025-08-17, 1d
+    최종 발표 자료 준비                :2025-08-17, 1d
+
 ```
 <br/>
 
 ## 데이터베이스 모델링 (ERD)
-``` mermaid
+```mermaid
 erDiagram
-  %% Auto-generated from db.sqlite3
   auth_group {
-    INTEGER id PK
-    VARCHAR(150) name
+    int id PK
+    string name
   }
   auth_group_permissions {
-    INTEGER id PK
-    INTEGER group_id
-    INTEGER permission_id
+    int id PK
+    int group_id
+    int permission_id
   }
   auth_permission {
-    INTEGER id PK
-    INTEGER content_type_id
-    VARCHAR(100) codename
-    VARCHAR(255) name
+    int id PK
+    int content_type_id
+    string codename
+    string name
   }
   courses_chapter {
-    INTEGER chapter_id PK
-    VARCHAR(255) title
-    DATETIME created_at
-    INTEGER course_id
-    INTEGER UNSIGNED order_index
+    int chapter_id PK
+    string title
+    datetime created_at
+    int course_id
+    uint order_index
   }
   courses_course {
-    INTEGER course_id PK
-    VARCHAR(255) title
-    VARCHAR(50) category
-    VARCHAR(10) type
-    VARCHAR(50) level
-    INTEGER price
-    TEXT description
-    DATETIME course_time
-    DATETIME course_duedate
-    VARCHAR(255) discord_url
-    DATETIME created_at
-    BOOL is_active
-    INTEGER UNSIGNED order_index
-    VARCHAR(10) price_type
-    INTEGER UNSIGNED code
-    VARCHAR(100) course_image
+    int course_id PK
+    string title
+    string category
+    string type
+    string level
+    int price
+    text description
+    datetime course_time
+    datetime course_duedate
+    string discord_url
+    datetime created_at
+    bool is_active
+    uint order_index
+    string price_type
+    uint code
+    string course_image
   }
   courses_courselike {
-    INTEGER id PK
-    DATETIME created_at
-    INTEGER course_id
-    INTEGER user_id
+    int id PK
+    datetime created_at
+    int course_id
+    int user_id
   }
   courses_enrollment {
-    INTEGER id PK
-    VARCHAR(16) status
-    DATETIME enrolled_at
-    DATETIME expired_at
-    DECIMAL progress
-    INTEGER course_id
-    INTEGER user_id
+    int id PK
+    string status
+    datetime enrolled_at
+    datetime expired_at
+    decimal progress
+    int course_id
+    int user_id
   }
   courses_instructor {
-    INTEGER instructor_id PK
-    VARCHAR(255) name
-    INTEGER code
-    DATETIME created_at
-    VARCHAR(255) affiliation
-    INTEGER course_id
-    VARCHAR(100) profile_image
-    VARCHAR(255) english_name
+    int instructor_id PK
+    string name
+    int code
+    datetime created_at
+    string affiliation
+    int course_id
+    string profile_image
+    string english_name
   }
   courses_video {
-    INTEGER video_id PK
-    VARCHAR(255) title
-    INTEGER duration
-    INTEGER chapter_id
-    INTEGER course_id
-    INTEGER UNSIGNED order_index
-    VARCHAR(100) video_file
+    int video_id PK
+    string title
+    int duration
+    int chapter_id
+    int course_id
+    uint order_index
+    string video_file
   }
   django_admin_log {
-    INTEGER id PK
-    TEXT object_id
-    VARCHAR(200) object_repr
-    SMALLINT UNSIGNED action_flag
-    TEXT change_message
-    INTEGER content_type_id
-    INTEGER user_id
-    DATETIME action_time
+    int id PK
+    text object_id
+    string object_repr
+    usmallint action_flag
+    text change_message
+    int content_type_id
+    int user_id
+    datetime action_time
   }
   django_content_type {
-    INTEGER id PK
-    VARCHAR(100) app_label
-    VARCHAR(100) model
+    int id PK
+    string app_label
+    string model
   }
   django_migrations {
-    INTEGER id PK
-    VARCHAR(255) app
-    VARCHAR(255) name
-    DATETIME applied
+    int id PK
+    string app
+    string name
+    datetime applied
   }
   django_session {
-    VARCHAR(40) session_key PK
-    TEXT session_data
-    DATETIME expire_date
+    string session_key PK
+    text session_data
+    datetime expire_date
   }
   token_blacklist_blacklistedtoken {
-    INTEGER id PK
-    DATETIME blacklisted_at
-    BIGINT token_id
+    int id PK
+    datetime blacklisted_at
+    bigint token_id
   }
   token_blacklist_outstandingtoken {
-    INTEGER id PK
-    VARCHAR(255) jti
-    TEXT token
-    DATETIME created_at
-    DATETIME expires_at
-    INTEGER user_id
+    int id PK
+    string jti
+    text token
+    datetime created_at
+    datetime expires_at
+    int user_id
   }
   users_user {
-    DATETIME last_login
-    BOOL is_superuser
-    VARCHAR(150) first_name
-    VARCHAR(150) last_name
-    BOOL is_staff
-    DATETIME date_joined
-    INTEGER id PK
-    VARCHAR(254) email
-    VARCHAR(128) password
-    VARCHAR(100) name
-    VARCHAR(1) gender
-    DATE birth_date
-    VARCHAR(10) role
-    BOOL is_active
-    DATETIME created_at
-    DATETIME updated_at
-    VARCHAR(100) profile_image
+    datetime last_login
+    bool is_superuser
+    string first_name
+    string last_name
+    bool is_staff
+    datetime date_joined
+    int id PK
+    string email
+    string password
+    string name
+    string gender
+    date birth_date
+    string role
+    bool is_active
+    datetime created_at
+    datetime updated_at
+    string profile_image
   }
   users_user_course {
-    INTEGER id PK
-    INTEGER user_id
-    INTEGER course_id
+    int id PK
+    int user_id
+    int course_id
   }
   users_user_groups {
-    INTEGER id PK
-    INTEGER user_id
-    INTEGER group_id
+    int id PK
+    int user_id
+    int group_id
   }
   users_user_user_permissions {
-    INTEGER id PK
-    INTEGER user_id
-    INTEGER permission_id
+    int id PK
+    int user_id
+    int permission_id
   }
-  auth_permission ||--|{ auth_group_permissions : permission_id->id
-  auth_group ||--|{ auth_group_permissions : group_id->id
-  django_content_type ||--|{ auth_permission : content_type_id->id
-  courses_course ||--|{ courses_chapter : course_id->course_id
-  users_user ||--|{ courses_courselike : user_id->id
-  courses_course ||--|{ courses_courselike : course_id->course_id
-  users_user ||--|{ courses_enrollment : user_id->id
-  courses_course ||--|{ courses_enrollment : course_id->course_id
-  courses_course ||--|{ courses_instructor : course_id->course_id
-  courses_course ||--|{ courses_video : course_id->course_id
-  courses_chapter ||--|{ courses_video : chapter_id->chapter_id
-  users_user ||--|{ django_admin_log : user_id->id
-  django_content_type ||--o{ django_admin_log : content_type_id->id
-  token_blacklist_outstandingtoken ||--|{ token_blacklist_blacklistedtoken : token_id->id
-  users_user ||--o{ token_blacklist_outstandingtoken : user_id->id
-  courses_course ||--|{ users_user_course : course_id->course_id
-  users_user ||--|{ users_user_course : user_id->id
-  auth_group ||--|{ users_user_groups : group_id->id
-  users_user ||--|{ users_user_groups : user_id->id
-  auth_permission ||--|{ users_user_user_permissions : permission_id->id
-  users_user ||--|{ users_user_user_permissions : user_id->id
+
+  auth_permission ||--|{ auth_group_permissions : "permission_id -> id"
+  auth_group ||--|{ auth_group_permissions : "group_id -> id"
+  django_content_type ||--|{ auth_permission : "content_type_id -> id"
+  courses_course ||--|{ courses_chapter : "course_id -> course_id"
+  users_user ||--|{ courses_courselike : "user_id -> id"
+  courses_course ||--|{ courses_courselike : "course_id -> course_id"
+  users_user ||--|{ courses_enrollment : "user_id -> id"
+  courses_course ||--|{ courses_enrollment : "course_id -> course_id"
+  courses_course ||--|{ courses_instructor : "course_id -> course_id"
+  courses_course ||--|{ courses_video : "course_id -> course_id"
+  courses_chapter ||--|{ courses_video : "chapter_id -> chapter_id"
+  users_user ||--|{ django_admin_log : "user_id -> id"
+  django_content_type ||--o{ django_admin_log : "content_type_id -> id"
+  token_blacklist_outstandingtoken ||--|{ token_blacklist_blacklistedtoken : "token_id -> id"
+  users_user ||--o{ token_blacklist_outstandingtoken : "user_id -> id"
+  courses_course ||--|{ users_user_course : "course_id -> course_id"
+  users_user ||--|{ users_user_course : "user_id -> id"
+  auth_group ||--|{ users_user_groups : "group_id -> id"
+  users_user ||--|{ users_user_groups : "user_id -> id"
+  auth_permission ||--|{ users_user_user_permissions : "permission_id -> id"
+  users_user ||--|{ users_user_user_permissions : "user_id -> id"
+
 ```
 
 ## 🌟 메인 기능
@@ -501,16 +500,7 @@ erDiagram
 | --- | --- | --- | --- | --- |
 | 강의 목록 | `GET` | `/api/courses/` |  |  |
 | 강의 상세 | `GET` | `/api/courses/<id>/` |  |  |
-| 강의 필터 | `GET` | `/api/courses/?` |  | [부분일치]
-- title 
-
-[choice]
-- price_type= paid(유료), free(무료), gov(국비)
-
-[정학히 일치 (’데이터 분석’ 등 공백은 가능)]
-- level
-- category 
-- type  |
+| 강의 필터 | `GET` | `/api/courses/?` |  |  |
 | 강의 좋아요 | `POST` | `/api/courses/int:course_id/like/` | **✅** |  |
 | 강의 좋아요 취소 | `DELETE` | `/api/courses/int:course_id/like/` | **✅** |  |
 
